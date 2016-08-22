@@ -1,6 +1,6 @@
 #! /bin/bash
 if [ $# -ne 4 ]; then
-  echo "Usage: ./compile.sh domino_program atom_template pipeline_depth pipeline_width";
+  echo "Usage: ./compile.sh domino_program atom_type pipeline_depth pipeline_width";
   exit;
 fi;
 
@@ -23,6 +23,6 @@ else
   echo "Found a mapping"
   grep "stages" /tmp/out.log
   grep "atoms/stage" /tmp/out.log
-  gvpr -f secondgraph.gv /tmp/error.log | neato -n -T png > /tmp/pipeline.png
+  gvpr -f secondgraph.gv /tmp/error.log | neato -n -T png > /tmp/pipeline.png 2> /dev/null
   open /tmp/pipeline.png
 fi
