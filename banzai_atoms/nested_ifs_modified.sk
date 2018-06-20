@@ -1,8 +1,7 @@
 include "muxes_modified.sk";
 include "rel_ops.sk";
 include "constants.sk";
-include "arith_ops.sk";
-
+include "arith_ops.sk";	
 StateResult atom_template(int state_1, int state_2, int pkt_1, int pkt_2, int pkt_3) {
   if (rel_op(Opt(state_1) + Mux4(pkt_1, pkt_2, pkt_3, 0) - Mux4(pkt_1, pkt_2, 0), C())) {
    if (rel_op(Opt(state_1) + Mux4(pkt_1, pkt_2, 0) - Mux4(pkt_1, pkt_2,pkt_3, 0), C())) {
