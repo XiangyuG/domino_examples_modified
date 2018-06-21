@@ -19,7 +19,7 @@ generator int Mux3(int op1, int op2, int op3) {
   else assert(false);
 }
 
-generator int Mux4(int op1,int op2,int op3){
+generator int Mux4(int op1,int op2,int op3,int op4){
   int choice = ??(2);
   if (choice == 0) return op1;
   else if (choice == 1) return op2;

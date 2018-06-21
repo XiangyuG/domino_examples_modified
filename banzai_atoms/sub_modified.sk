@@ -1,0 +1,16 @@
+include "muxes_modified.sk";
+include "rel_ops.sk";
+include "constants.sk";
+include "arith_ops.sk";
+
+StateResult atom_template(int state_1, int state_2, int pkt_1, int pkt_2,int pkt_3) {
+  if (rel_op(Opt(state_1), Mux4(pkt_1, pkt_2,pkt_3, C()))) {
+    state_1 = Opt(state_1) + arith_op(Mux4(pkt_1, pkt_2,pkt_3, C()),  Mux4(pkt_1, pkt_2,pkt_3, C()));
+  } else {
+    state_1 = Opt(state_1) + arith_op(Mux4(pkt_1, pkt_2,pkt_3, C()),  Mux4(pkt_1, pkt_2,pkt_3, C()));
+  }
+  StateResult ret = new StateResult();
+  ret.result_state_1 = state_1;
+  ret.result_state_2 = state_2;
+  return ret;
+}
