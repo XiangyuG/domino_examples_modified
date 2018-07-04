@@ -1,0 +1,59 @@
+struct StateResult {
+  int result_state_1;
+  int result_state_2;
+}
+include "muxes_modified.sk";
+include "rel_ops_modified.sk";
+include "constants.sk";
+include "arith_ops.sk";	
+
+StateResult atom_template(int state_1, int state_2, int pkt_1, int pkt_2, int pkt_3) {
+  if (rel_op(Opt(state_1) + Mux4(pkt_1, pkt_2, pkt_3, 0) - Mux4(pkt_1, pkt_2,pkt_3, 0), C())) {
+   if (rel_op(Opt(state_1) + Mux4(pkt_1, pkt_2,pkt_3, 0) - Mux4(pkt_1, pkt_2,pkt_3, 0), C())) {
+    state_1 = Opt(state_1) + arith_op(Mux4(pkt_1, pkt_2, pkt_3, C()), Mux4(pkt_1, pkt_2, pkt_3, C()));
+   } else {
+    state_1 = Opt(state_1) + arith_op(Mux4(pkt_1, pkt_2, pkt_3, C()),  Mux4(pkt_1, pkt_2, pkt_3, C()));
+   }
+  } else {
+   if (rel_op(Opt(state_1) + Mux4(pkt_1, pkt_2,pkt_3, 0) - Mux4(pkt_1, pkt_2,pkt_3, 0), C())) {
+    state_1 = Opt(state_1) + arith_op(Mux4(pkt_1, pkt_2,pkt_3, C()),  Mux4(pkt_1, pkt_2,pkt_3, C()));
+   } else {
+    state_1 = Opt(state_1) + arith_op(Mux4(pkt_1, pkt_2,pkt_3, C()),  Mux4(pkt_1, pkt_2,pkt_3, C()));
+   }
+  }
+
+  StateResult ret = new StateResult();
+  ret.result_state_1 = state_1;
+  ret.result_state_2 = state_2;
+  return ret;
+}
+
+StateResult codelet(int state_1, int state_2, int pkt_1, int pkt_2,int pkt_3){int pkt_last_finish00;
+int pkt_last_finish01;
+int pkt_tmp00;
+int pkt_tmp1;
+int pkt_tmp2;
+int pkt_tmp3;
+int pkt_tmp7;
+pkt_last_finish00=state_1;
+pkt_tmp1=pkt_last_finish00>1;
+pkt_tmp2=pkt_3<pkt_last_finish00;
+pkt_tmp00=(pkt_tmp1!= 0)&&(pkt_tmp2!= 0);
+pkt_tmp3=pkt_last_finish00+pkt_1;
+pkt_last_finish01=((pkt_tmp00!= 0)) ? pkt_tmp3 : pkt_last_finish00;
+pkt_tmp7=!(pkt_tmp00!= 0);
+state_1=(pkt_tmp7 != 0) ? pkt_2 : pkt_last_finish01;
+  StateResult ret = new StateResult();
+  ret.result_state_1 = state_1;
+  ret.result_state_2 = state_2;
+  return ret;
+}
+harness void main(int state_1, int state_2, int pkt_1, int pkt_2,int pkt_3) {
+  StateResult spec_result = codelet(state_1, state_2, pkt_1, pkt_2,pkt_3);
+
+  StateResult impl_result = atom_template(state_1, state_2, pkt_1, pkt_2,pkt_3);
+
+  // Assert values
+  assert(spec_result.result_state_1 == impl_result.result_state_1);
+  assert(spec_result.result_state_2 == impl_result.result_state_2);
+}
